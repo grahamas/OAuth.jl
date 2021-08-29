@@ -32,7 +32,7 @@ Builds OAuth header, defaulting to OAuth 1.0. Function assumes `options` has alr
 been run through `encodeURI!`.
 
 """
-function oauth_header(httpmethod, baseurl, options, oauth::OAuth1a; oauth_signature_method = "HMAC-SHA1")
+function oauth_header(oauth::OAuth1a, httpmethod, baseurl, options; oauth_signature_method = "HMAC-SHA1")
     oauth_consumer_key = oauth.consumer_key
     oauth_consumer_secret = oauth.consumer_secret
     oauth_token = oauth.token

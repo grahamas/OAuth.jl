@@ -7,6 +7,6 @@ end
 
 oauth_version_string(::OAuth2) = "2.0"
 
-function oauth_header(httpmethod, baseurl, options, oauth::OAuth2; kwargs...)
+function oauth_header(oauth::OAuth2, httpmethod, baseurl, options; kwargs...)
     "Bearer $(oauth.bearer_token)"
 end

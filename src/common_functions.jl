@@ -222,12 +222,12 @@ end
 Makes `GET` or `POST` call to OAuth API.
 
 """
-function oauth_request_resource(endpoint::String, httpmethod::String, options::Dict, oauth::AbstractOAuth)
+function oauth_request_resource(oauth::AbstractOAuth, endpoint::String, httpmethod::String, options::Dict)
     #Build query string
     query_str = HTTP.escapeuri(options)
 
     #Build oauth_header
-    oauth_header_val = oauth_header(httpmethod, endpoint, options, oauth)
+    oauth_header_val = oauth_header(oauth, httpmethod, endpoint, options)
 
     #Make request
     headers = Dict{String,String}(
