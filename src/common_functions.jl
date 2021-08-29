@@ -215,3 +215,30 @@ function oauth_signature(base_string, oauth::AbstractOAuth, signature_method)
         error("Unsupported OAuth signature method: $(signature_method)")
     end
 end
+
+"""
+    oauth_request_resource(endpoint::String, httpmethod::String, options::Dict, oauth_consumer_key::String, oauth_consumer_secret::String, oauth_token::String, oauth_token_secret::String)
+
+Makes `GET` or `POST` call to OAuth API.
+
+"""
+function oauth_request_resource(endpoint::String, httpmethod::String, options::Dict, oauth::AbstractOAuth)
+    #Build query string
+    query_str = HTTP.escapeuri(options)
+
+    #Build oauth_header
+    oauth_header_val = oauth_header(httpmethod, endpoint, options, oauth)
+
+    #Make request
+    headers = Dict{String,String}(
+            "Content-Type" => "application/x-www-form-urlencoded",
+            "Authorization" => oauth_header_val,
+            "Accept" => "*/*"
+        )
+
+    if uppercase(httpmethod) == "POST"
+        return HTTP.post(endpoint; body = query_str, headers = headers)
+    elseif uppercase(httpmethod) == "GET"
+        return HTTP.get("$(endpoint)?$query_str"; headers = headers)
+    end
+end

@@ -61,30 +61,3 @@ function oauth_header(httpmethod, baseurl, options, oauth::OAuth1a; oauth_signat
     return "OAuth oauth_consumer_key=\"$(options["oauth_consumer_key"])\", oauth_nonce=\"$(options["oauth_nonce"])\", oauth_signature=\"$(oauth_sig)\", oauth_signature_method=\"$(options["oauth_signature_method"])\", oauth_timestamp=\"$(options["oauth_timestamp"])\", oauth_token=\"$(options["oauth_token"])\", oauth_version=\"$(options["oauth_version"])\""
 
 end
-
-"""
-    oauth_request_resource(endpoint::String, httpmethod::String, options::Dict, oauth_consumer_key::String, oauth_consumer_secret::String, oauth_token::String, oauth_token_secret::String)
-
-Makes `GET` or `POST` call to OAuth API.
-
-"""
-function oauth_request_resource(endpoint::String, httpmethod::String, options::Dict, oauth_consumer_key::String, oauth_consumer_secret::String, oauth_token::String, oauth_token_secret::String)
-    #Build query string
-    query_str = HTTP.escapeuri(options)
-
-    #Build oauth_header
-    oauth_header_val = oauth_header(httpmethod, endpoint, options, oauth_consumer_key, oauth_consumer_secret, oauth_token, oauth_token_secret)
-
-    #Make request
-    headers = Dict{String,String}(
-            "Content-Type" => "application/x-www-form-urlencoded",
-            "Authorization" => oauth_header_val,
-            "Accept" => "*/*"
-        )
-
-    if uppercase(httpmethod) == "POST"
-        return HTTP.post(endpoint; body = query_str, headers = headers)
-    elseif uppercase(httpmethod) == "GET"
-        return HTTP.get("$(endpoint)?$query_str"; headers = headers)
-    end
-end
