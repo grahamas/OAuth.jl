@@ -13,9 +13,11 @@ using OAuth, Test
 @test length(oauth_nonce(30)) == 30
 @test length(oauth_nonce(32)) == 32
 
-@test oauth_sign_hmac_sha1("randy", "zwitch") == "WqKCG5iyhFiES3fWYVdWJWwinaY="
+test_oauth1a = OAuth1a("consumer_key", "9djdj82h48djs9d2", "token", "kkk9d7dh3k39sjv7")
 
-@test oauth_signing_key("9djdj82h48djs9d2", "kkk9d7dh3k39sjv7") == "9djdj82h48djs9d2&kkk9d7dh3k39sjv7"
+@test oauth_sign_hmac_sha1("randy", test_oauth1a) == "TrJTbr3xSI6bhJUggXo7tJicLOg="
+
+@test oauth_signing_key(test_oauth1a) == "9djdj82h48djs9d2&kkk9d7dh3k39sjv7"
 
 @test oauth_signature_base_string("POST", "http://example.com", "?julia=fast&lang=elegant") ==
         "POST&http%3A%2F%2Fexample.com&%3Fjulia%3Dfast%26lang%3Delegant"

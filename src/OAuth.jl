@@ -15,8 +15,13 @@ export
     oauth_body_hash_data,
     oauth_body_hash_encode,
     oauth_header,
-    oauth_request_resource
+    oauth_request_resource,
+    OAuth1a,
+    OAuth2
 
+abstract type AbstractOAuth end
+
+include("common_functions.jl")
 include("oauth1a.jl")
 include("oauth2.jl")
 
